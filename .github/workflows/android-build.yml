@@ -19,8 +19,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.11.1
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK components
+        run: |
+          sdkmanager "platforms;android-37" "build-tools;36.0.0" "platform-tools"
+
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > collector/local.properties
 
       - name: Generate debug keystore
         run: |
@@ -31,12 +43,9 @@ jobs:
             -keyalg RSA -keysize 2048 -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x collector/gradlew
-
       - name: Build Debug APK
         working-directory: collector
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
