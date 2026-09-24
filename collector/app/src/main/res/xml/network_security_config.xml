@@ -6,7 +6,7 @@
     <!-- 只信任「鲸鲸中枢」这一张证书（证书固定）：
          换了证书、或者有人中间人冒充网关，App 会直接拒连，不会把数据交出去 -->
     <domain-config>
-        <domain includeSubdomains="false">YOUR_SERVER_IP</domain>
+        <domain includeSubdomains="false">8.154.39.203</domain>
         <trust-anchors>
             <certificates src="@raw/hub_cert" />
         </trust-anchors>
